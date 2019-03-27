@@ -1,11 +1,25 @@
-var db = require("../models");
+//var db = require("../models");
+var request = require("request");
 
 module.exports = function(app) {
   // Get all examples
-  app.get("/api/examples", function(req, res) {
-    db.Example.findAll({}).then(function(dbExamples) {
-      res.json(dbExamples);
-    });
+  app.get("/api/flightQuotes", function(req, res) {
+    console.log(req.query);
+    var queryURL =
+      "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/US/usd/en-US/" +
+      req.query.cityCode +
+      "/us/" +
+      req.query.fromDT +
+      "/" +
+      req.query.toDT +
+      "?";
+    console.log(queryURL);
+    request({
+      uri: queryURL,
+      qs: {
+        apikey: "prtl6749387986743898559646983194"
+      }
+    }).pipe(res);
   });
 
   // Create a new example
