@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS project2;
-CREATE DATABASE project2;
+DROP DATABASE IF EXISTS flybuy_refdb;
+CREATE DATABASE flybuy_refdb;
 
-USE project2; 
+USE flybuy_refdb; 
 Drop TABLE IF EXISTS places;
 
 CREATE TABLE IF NOT EXISTS places (
