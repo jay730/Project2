@@ -89,6 +89,9 @@
   -o-background-size: cover;
   background-size: cover;
 }
+.subtitle{
+  color: white;
+}
 
 .light-background {
   background-color: white;
