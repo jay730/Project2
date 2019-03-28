@@ -108,7 +108,6 @@ var stateCode;
 var startDateTime;
 var endDateTime;
 var selectedEvents = [];
-var cityCode;
 var placesArray = [];
 var selectedFlights = [];
 var noQuoteMessage = "";
@@ -116,7 +115,6 @@ var noEventMessage = "";
 var buttonID;
 var eventCity;
 var inputValid = true;
-
 
 //functions
 //main functions to call sky api
@@ -128,14 +126,14 @@ function mainFunction() {
   //input validation
   inputValidation();
   if (inputValid) {
-      //input conversion
-      //inputConversion();
-      //call event API
-      skyAPI();
-  };
-};
+    //input conversion
+    inputConversion();
+    //call event API
+    skyAPI();
+  }
+}
 
-function initialization(){
+function initialization() {
   noQuoteMessage = "";
   inputValid = true;
   selectedEvents = [];
@@ -152,115 +150,78 @@ function inputCollection() {
   toDT = $("#toDT").val();
   //max price
   price = $("#price").val();
-
-};
+}
 
 function inputValidation() {
   if (!$.isNumeric(price) || price <= 0) {
-      $("#results").text("Please put correct price!");
-      inputValid = false;
-  };
+    $("#results").text("Please put correct price!");
+    inputValid = false;
+  }
 
   var now = moment();
   now = moment(now).add(1, "days");
   now = moment(now).format("YYYY-MM-DD");
   if (toDT < fromDT) {
-      $("#results").text("Please pick correct end date!");
-      inputValid = false;
-  };
-  
-  if (fromDT < now){
-      $("#results").text("The start date is a past date. Please pick correct start date!");
-      inputValid = false;
-  };
-};
+    $("#results").text("Please pick correct end date!");
+    inputValid = false;
+  }
+
+  if (fromDT < now) {
+    $("#results").text(
+      "The start date is a past date. Please pick correct start date!"
+    );
+    inputValid = false;
+  }
+}
 
 function inputConversion() {
   var cityState = origin.split(",");
   city = cityState[0];
   stateCode = cityState[1];
   startDateTime = fromDT + "T00:00:00Z";
-  endDateTime = toDT + "T00:00:00Z"
-  var place = $.grep(placesArray, function (n){
-      return (n.CityName === city);
-  });
-  cityCode = place[0].SkyscannerCode;
+  endDateTime = toDT + "T00:00:00Z";
 }
 
 function skyAPI() {
-  //skyUrl();
-  //var queryURL = skyUrl();
   $.ajax("/api/flightQuotes", {
     type: "GET",
     data: {
-      cityCode: "MSP",
-      fromDT: "2019-04-10",
-      toDT: "2019-04-28"
+      city: city,
+      fromDT: fromDT,
+      toDT: toDT
     }
-  }).then(filterFlights);
-};
+  }).then(returnFlights);
+}
 
-function skyUrl() {
-  queryURL = "https://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/US/usd/en-US/" + cityCode + "/us/" + fromDT + "/" + toDT + "?";
-  queryParams = {
-      "apikey": "prtl6749387986743898559646983194",
-  };
-  return queryURL + $.param(queryParams);
-};
-
-function filterFlights(response) {
-  console.log(response);
-  if (response.Quotes.length === 0) {
-      noQuoteMessage = "no quote is available at this time!";
-  }
-  else {
-      for (var i=0; i<response.Quotes.length; i++) {
-          if(response.Quotes[i].MinPrice <= price){
-              var destinationCode = response.Quotes[i].OutboundLeg.DestinationId;
-              var place = $.grep(placesArray, function (n){
-                  return (n.PlaceId === destinationCode);
-              });
-              //var destinationCity = place[0].CityName;
-              var destinationCity = "test";
-              selectedFlights.push({
-                      "destinationCity": destinationCity,
-                      "price": response.Quotes[i].MinPrice
-                  }
-              )
-          }
-      }
-      returnFlights();
-  };
-};
-
-function returnFlights() {
+function returnFlights(response) {
   var $section = $("<section>");
   var $divContainer = $("<div>");
   $divContainer.attr("class", "container");
-  
-  if (selectedFlights.length === 0 ){
-      noQuoteMessage = "no quote is available at this time! You might want to increase the price.";
+
+  if (selectedFlights.length === 0) {
+    noQuoteMessage =
+      "no quote is available at this time! You might want to increase the price.";
+  } else {
+    for (var i = 0; i < selectedFlights.length; i++) {
+      var $button = $("<button>");
+      $button.text(
+        selectedFlights[i].destinationCity + "," + selectedFlights[i].price
+      );
+      $button.attr("class", "flightButton");
+      $button.css("display", "block");
+      $button.attr("id", i);
+      $button.attr("value", selectedFlights[i].destinationCity);
+      $divContainer.append($button);
+    }
   }
-  else {
-      for (var i = 0; i < selectedFlights.length; i++) {
-          var $button = $("<button>");
-          $button.text(selectedFlights[i].destinationCity + "," + selectedFlights[i].price);
-          $button.attr("class", "flightButton");
-          $button.css("display", "block");
-          $button.attr("id", i);
-          $button.attr("value", selectedFlights[i].destinationCity);
-          $divContainer.append($button);
-      };
-  };
-  if (noQuoteMessage === ""){
-      $section.append($divContainer);
-      $("#results").append($section);
+  if (noQuoteMessage === "") {
+    $section.append($divContainer);
+    $("#results").append($section);
+  } else {
+    $("#results").text(noQuoteMessage);
+    noQuoteMessage = "";
   }
-  else {
-      $("#results").text(noQuoteMessage);
-      noQuoteMessage = "";
-  }
-};
+}
 
 //functions to call event api
 function eventFunction() {
@@ -270,109 +231,112 @@ function eventFunction() {
   eventCity = $(this).attr("value");
   buttonID = "#" + $(this).attr("id");
   eventAPI();
-};
+}
 
 function eventAPI() {
   var queryURL = eventUrl();
   $.ajax({
-      url: queryURL,
-      method: "GET"
+    url: queryURL,
+    method: "GET"
   }).then(filterEvents);
 }
 
 function eventUrl() {
   queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?";
   queryParams = {
-      "apikey": "RiZRkyV5YlnXPcOPAlrXwWG4IMbwx2n8",
-      "countryCode": "US"
+    apikey: "RiZRkyV5YlnXPcOPAlrXwWG4IMbwx2n8",
+    countryCode: "US"
   };
   queryParams.city = eventCity;
   queryParams.startDateTime = startDateTime;
   queryParams.endDateTime = endDateTime;
   return queryURL + $.param(queryParams);
-};
+}
 
 function filterEvents(response) {
   var eventCount = 0;
   if (response.page.totalElements === 0) {
-      noEventMessage = "no event is available at this time!"
+    noEventMessage = "no event is available at this time!";
+  } else if (response._embedded.events.length > 3) {
+    eventCount = 3;
+  } else {
+    eventCount = response._embedded.events.length;
   }
-  else if (response._embedded.events.length > 3) {
-      eventCount = 3;
+  if (eventCount > 0) {
+    for (var i = 0; i < eventCount; i++) {
+      selectedEvents.push({
+        eventName: response._embedded.events[i].name,
+        eventURL: response._embedded.events[i].url
+      });
+    }
   }
-  else {
-      eventCount = response._embedded.events.length;
-  };
-  if (eventCount > 0){
-      for (var i = 0; i < eventCount; i++) {
-          selectedEvents.push({
-              "eventName": response._embedded.events[i].name,
-              "eventURL": response._embedded.events[i].url
-          });
-      };
-  };
   returnEvents();
   weatherAPI();
-};
+}
 
 function returnEvents() {
-     
   var section = $("<section>");
   var divContainer = $("<div>");
   section.attr("class", "eventSection");
   divContainer.attr("class", "container");
-  if (selectedEvents.length !== 0){    
-      for (var i = 0; i < selectedEvents.length; i++) {
-          var eventButton = $("<button>");
-          var eventLink = $("<a>");
-          eventLink.text(selectedEvents[i].eventName);
-          eventLink.attr("href", selectedEvents[i].eventURL);
-          eventLink.attr("target", "_blank");
-          eventButton.append(eventLink);
-          divContainer.append(eventButton);
-
-      };
+  if (selectedEvents.length !== 0) {
+    for (var i = 0; i < selectedEvents.length; i++) {
+      var eventButton = $("<button>");
+      var eventLink = $("<a>");
+      eventLink.text(selectedEvents[i].eventName);
+      eventLink.attr("href", selectedEvents[i].eventURL);
+      eventLink.attr("target", "_blank");
+      eventButton.append(eventLink);
+      divContainer.append(eventButton);
+    }
   } else {
-      divContainer.text(noEventMessage);
-      noEventMessage = "";
+    divContainer.text(noEventMessage);
+    noEventMessage = "";
   }
   section.append(divContainer);
   $(buttonID).append(section);
-};
+}
 
 //functions to call weather api
 function weatherAPI() {
   weatherUrl();
   var queryURL = weatherUrl();
   $.ajax({
-      url: queryURL,
-      method: "GET"
+    url: queryURL,
+    method: "GET"
   }).then(returnWeather);
-};
+}
 
 function weatherUrl() {
   queryURL = "https://api.openweathermap.org/data/2.5/weather?";
   queryParams = {
-      "apikey": "710caaee5eb7962fcebb2ea857da3696"
+    apikey: "710caaee5eb7962fcebb2ea857da3696"
   };
   queryParams.q = eventCity + ",us";
   queryParams.units = "imperial";
   return queryURL + $.param(queryParams);
-};
+}
 
 function returnWeather(response) {
   var section = $("<section>");
   var divContainer = $("<div>");
   section.attr("class", "weatherSection");
   divContainer.attr("class", "container");
-  divContainer.text("Current Weather: " + response.main.temp + ", " + response.weather[0].description);
+  divContainer.text(
+    "Current Weather: " +
+      response.main.temp +
+      ", " +
+      response.weather[0].description
+  );
   section.append(divContainer);
   $(buttonID).append(section);
-};     
+}
 
+$(document).ready(function() {
+  $(".first-button").on("click", function() {
+    $(".animated-icon1").toggleClass("open");
+  });
+});
 // Add event listeners to the submit and delete buttons
 $("#submit").on("click", mainFunction);
 $(document).on("click", ".flightButton", eventFunction);
-
-
-

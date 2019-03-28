@@ -1,8 +1,11 @@
 module.exports = function(sequelize, DataTypes) {
-  var Airport = sequelize.define(
-    "Airport",
+  var places = sequelize.define(
+    "places",
     {
-      id: DataTypes.INTEGER(15),
+      id: {
+        type: DataTypes.INTEGER(15),
+        primaryKey: true
+      },
       CityId: DataTypes.STRING(45),
       CityName: DataTypes.STRING(45),
       CountryName: DataTypes.STRING(100),
@@ -19,5 +22,5 @@ module.exports = function(sequelize, DataTypes) {
     }
   );
 
-  return Airport;
+  return places;
 };
