@@ -95,24 +95,28 @@
 
 .light-background {
   background-color: white;
-  height: 450px;
+  height: 500px;
   padding-top: 25px;
   padding-bottom: 25px;
   margin-left: 50px;
   margin-right: 50px;
   box-shadow: 1px 1px 10px 2px #bdbdbd;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 } 
 
 .flybuy-icon{
   width: 300px;
   height: auto;
-  margin-left: auto;
-  margin-right: auto;
+  display: block;
+  margin: auto;
 }
 
 .header {
   padding:10px;
-  margin-bottom: 10px;
+  text-align: center;
 }
 
 hr {
@@ -120,23 +124,35 @@ hr {
   border-radius: 1px;
 }
 
-.light-background {
-  background-color: white;
-  height: 450px;
-  padding-top: 25px;
-  padding-bottom: 25px;
-  margin-left: 50px;
-  margin-right: 50px;
-} 
+
 
 .paradise-background{
-  background-image: url('../img/paradise-background.jpg');
-  background-size: cover;
+padding-top: 25px;
+background: #3D7EAA;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to top, #FFE47A, #3D7EAA);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to top, #FFE47A, #3D7EAA); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+padding-bottom: 25px;
+
 }
 
+
+/******
+  Inputs 
+******/
 .input-container {
   margin: 15px;
 }
+
+.input-format{
+  border-radius: 2px;
+}
+
+#submit{
+
+  background: whitesmoke;
+  border-radius: 2px;
+}
+
 
 .footer {
   height: 30px;
@@ -145,6 +161,14 @@ hr {
   background-color: #363636;
   color: whitesmoke;
 }
+.footer-container-fluid{
+  background-color: #363636;
+  padding-top: 10px;
+  padding-bottom: 1px;
+
+}
+
+
 
 .copyright-small {
   font-size: 12px;
