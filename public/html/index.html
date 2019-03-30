@@ -7,116 +7,133 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="../styles/styles.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.1.0/wNumb.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/13.1.4/nouislider.css">
     <title>FlyBuy</title>
 </head>
 
 <body>
-        <div id="app">
-                <nav class="navbar my-nav navbar-expand-lg  bg-light">
-                        <a class="navbar-brand">Flybuy &nbsp; <i class="fas fa-plane"></i></a>
+    <div id="app">
+        <nav class="navbar my-nav navbar-expand-lg  bg-light">
+            <a class="navbar-brand">Flybuy &nbsp; <i class="fas fa-plane"></i></a>
 
-                        <button class="navbar-toggler first-button" type="button" data-toggle="collapse" data-target="#navbarSupportedContent20"
-                        aria-controls="navbarSupportedContent20" aria-expanded="false" aria-label="Toggle navigation">
-                        <div class="animated-icon1"><span></span><span></span><span></span></div>
-                      </button>
-                    
-                      <div class="collapse navbar-collapse" id="navbarSupportedContent20">
-                        <ul class="navbar-nav mr-auto">
-            
-                        </ul>
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/login') }}">Trips</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/register') }}">Login</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+            <button class="navbar-toggler first-button" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent20" aria-controls="navbarSupportedContent20" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <div class="animated-icon1"><span></span><span></span><span></span></div>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent20">
+                <ul class="navbar-nav mr-auto">
+
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/login') }}">Trips</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/register') }}">Login</a>
+                    </li>
+                </ul>
             </div>
+        </nav>
+    </div>
     <div class="header">
         <div class="block has-text-centered mt-50">
-        <img class="flybuy-icon" src="../img/Flybuy_1 .png">
+            <img class="flybuy-icon" src="../img/Flybuy_1 .png">
             <hr>
         </div>
     </div>
-    <div class= "light-background">
-    <div class="container paradise-background">
-        <div class= "input-container">
-                <h1 class="subtitle ">Last Minute Trips at Your Price.</h1>
-        <div class="block">
+    <div class="light-background">
+        <div class="container paradise-background">
+            <div class="input-container">
+                <h1 class="subtitle">Last Minute Trips at Your Price.</h1>
+                <div class="block">
 
-            <div class="field">
-                <div class="control">
-                    <label class="label">Select Departing City</label>
-                    <div class="select">
-                        <select id="origin">
-                            <option>Minneapolis, MN</option>
-                            <option>Chicago, IL</option>
-                            <option>Los Angeles, CA</option>
-                            <option>San Diego, CA</option>
-                            <option>San Francisco, CA</option>
-                            <option>Houston, TX</option>
-                            <option>Phoenix, AZ</option>
-                            <option>Miami, FL</option>
-                            <option>Denver, CO</option>
-                            <option>Kansas City, MS</option>
-                            <option>Las Vegas, NV</option>
-                            <option>Salt lake City, UT</option>
-                            <option>Philadelphia, PA</option>
-                            <option>Boston, MA</option>
-                            <option>Des Moines, IA</option>
-                        </select>
+                    <div class="field">
+                        <div class="control">
+                            <label class="label">Select Departing City</label>
+                            <div class="select">
+                                <select id="origin">
+                                        <option value="" disabled selected></option>
+                                    <option>Minneapolis, MN</option>
+                                    <option>Chicago, IL</option>
+                                    <option>Los Angeles, CA</option>
+                                    <option>San Diego, CA</option>
+                                    <option>San Francisco, CA</option>
+                                    <option>Houston, TX</option>
+                                    <option>Phoenix, AZ</option>
+                                    <option>Miami, FL</option>
+                                    <option>Denver, CO</option>
+                                    <option>Kansas City, MS</option>
+                                    <option>Las Vegas, NV</option>
+                                    <option>Salt lake City, UT</option>
+                                    <option>Philadelphia, PA</option>
+                                    <option>Boston, MA</option>
+                                    <option>Des Moines, IA</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-            <div class="field">
-                <label class="label">Max Budget ($)</label>
-                <div class="control">
-                    <input class="input" type="number" id="price" placeholder="Enter Max Budger Here" required />
-                </div>
-            </div>
-                
-            <div class="field">
-                <label class="label">Start Date</label>
-                <div class="control">
-                        <form>
-                                <div class="sd-container">
-                                 <input name="calendarselect{ContactID}" class="timeselect" type="date" id="fromDT" required/>
-                                  <span class="open-button">
-                                    <button type="button"> <i class="fas fa-calendar-alt" alt= "Date Picker" id="datepickericon"></i></button>
-                                  </span>
-                                </div>
-                              </form>
-                </div>                
-            </div>
-            <div class="field">
-                <label class="label">End Date</label>
-                <div class="control">
-                        <form>
-                                <div class="sd-container">
-                                 <input name="calendarselect{ContactID}" class="timeselect" type="date" id="toDT" required/>
-                                  <span class="open-button">
-                                    <button type="button"> <i class="fas fa-calendar-alt" alt= "Date Picker" id="datepickericon"></i></button>
-                                  </span>
-                                </div>
-                              </form>
-                </div>                
-            </div>
-            <div class="field is-grouped">
-                <div class="control">
-                    <button class="button is-link" id="submit">Submit</button>
-                </div>
-            </div>
+                <br>
+                <div class="field">
+                    <div class="example">
+                            <label class="label">Max Budget ($)</label>
+                        <div id="slider-format" class="noUi-target noUi-ltr noUi-horizontal">
+                                <div class="noUi-origin" style="transform: translate(-61.6667%, 0px); z-index: 4;">       
+                                    </div>
+                            </div>
+                        </div>
+                        <br>
+                        <input title="Formatted number" id="input-format">
+                    </div>
 
-        </div>
+                    <div class="field">
+                            <label class="label">Start Date</label>
+                            <div class="control">
+                                <form>
+                                    <div class="sd-container">
+                                        <input name="calendarselect{ContactID}" class="timeselect" type="date" id="fromDT"
+                                            required />
+                                        <span class="open-button">
+                                            <button type="button"> <i class="fas fa-calendar-alt" alt="Date Picker"
+                                                    id="datepickericon"></i></button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">End Date</label>
+                            <div class="control">
+                                <form>
+                                    <div class="sd-container">
+                                        <input name="calendarselect{ContactID}" class="timeselect" type="date" id="toDT"
+                                            required />
+                                        <span class="open-button">
+                                            <button type="button"> <i class="fas fa-calendar-alt" alt="Date Picker"
+                                                    id="datepickericon"></i></button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="field">
+                            <div class="control">
+                                <button class="btn btn-outline-warning" id="submit">Submit</button>
+                            </div>
+                </div>
+
+                </div>
+            </div>
     </div>
-</div>
     <div class="container">
         <div id="results" class="block has-background-warning">
 
@@ -124,18 +141,20 @@
     </div>
 
     <footer class="footer">
-            <div class="container-fluid">
-                    <i class="fab fa-instagram"></i>
-                    <i class="fab fa-twitter-square"></i>
-                    <i class="fab fa-facebook-square"></i>
-                </div>
-              <span class="text-center">
-                <p>&copy; Copyright 2019 FlyBuy</p>
-            </footer>
+        <div class="footer-container-fluid">
+            <i class="fab fa-instagram fa-2x"></i>
+            <i class="fab fa-twitter-square fa-2x"></i>
+            <i class="fab fa-facebook-square fa-2x"></i>
+            <p>&copy; Copyright 2019 FlyBuy</p>
+        </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="/js/wNumb.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/13.1.4/nouislider.js"></script>
     <script src="../js/index.js"></script>
 </body>
 
