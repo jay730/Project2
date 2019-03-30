@@ -110,7 +110,6 @@ var startDateTime;
 var endDateTime;
 var selectedEvents = [];
 var placesArray = [];
-var selectedFlights = [];
 var noQuoteMessage = "";
 var noEventMessage = "";
 var buttonID;
@@ -218,12 +217,13 @@ function skyAPI() {
     data: {
       city: city,
       fromDT: fromDT,
-      toDT: toDT
+      toDT: toDT,
+      price: price
     }
   }).then(returnFlights);
 }
 
-function returnFlights(response) {
+function returnFlights(selectedFlights) {
   var $section = $("<section>");
   var $divContainer = $("<div>");
   $divContainer.attr("class", "container");
@@ -256,7 +256,6 @@ function returnFlights(response) {
 //functions to call event api
 function eventFunction() {
   $(".eventSection").empty();
-  $(".weatherSection").empty();
   selectedEvents = [];
   eventCity = $(this).attr("value");
   buttonID = "#" + $(this).attr("id");
@@ -264,23 +263,14 @@ function eventFunction() {
 }
 
 function eventAPI() {
-  var queryURL = eventUrl();
-  $.ajax({
-    url: queryURL,
-    method: "GET"
+  $.ajax("/api/eventSearch", {
+    type: "GET",
+    data: {
+      city: eventCity,
+      startDateTime: startDateTime,
+      endDateTime: endDateTime
+    }
   }).then(filterEvents);
-}
-
-function eventUrl() {
-  queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?";
-  queryParams = {
-    apikey: "RiZRkyV5YlnXPcOPAlrXwWG4IMbwx2n8",
-    countryCode: "US"
-  };
-  queryParams.city = eventCity;
-  queryParams.startDateTime = startDateTime;
-  queryParams.endDateTime = endDateTime;
-  return queryURL + $.param(queryParams);
 }
 
 function filterEvents(response) {
@@ -301,7 +291,6 @@ function filterEvents(response) {
     }
   }
   returnEvents();
-  weatherAPI();
 }
 
 function returnEvents() {
@@ -323,41 +312,6 @@ function returnEvents() {
     divContainer.text(noEventMessage);
     noEventMessage = "";
   }
-  section.append(divContainer);
-  $(buttonID).append(section);
-}
-
-//functions to call weather api
-function weatherAPI() {
-  weatherUrl();
-  var queryURL = weatherUrl();
-  $.ajax({
-    url: queryURL,
-    method: "GET"
-  }).then(returnWeather);
-}
-
-function weatherUrl() {
-  queryURL = "https://api.openweathermap.org/data/2.5/weather?";
-  queryParams = {
-    apikey: "710caaee5eb7962fcebb2ea857da3696"
-  };
-  queryParams.q = eventCity + ",us";
-  queryParams.units = "imperial";
-  return queryURL + $.param(queryParams);
-}
-
-function returnWeather(response) {
-  var section = $("<section>");
-  var divContainer = $("<div>");
-  section.attr("class", "weatherSection");
-  divContainer.attr("class", "container");
-  divContainer.text(
-    "Current Weather: " +
-      response.main.temp +
-      ", " +
-      response.weather[0].description
-  );
   section.append(divContainer);
   $(buttonID).append(section);
 }
