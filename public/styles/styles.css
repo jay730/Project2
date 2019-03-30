@@ -132,9 +132,7 @@ background: #3D7EAA;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to top, #FFE47A, #3D7EAA);  /* Chrome 10-25, Safari 5.1-6 */
 background: linear-gradient(to top, #FFE47A, #3D7EAA); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 padding-bottom: 25px;
-
 }
-
 
 /******
   Inputs 
@@ -143,8 +141,13 @@ padding-bottom: 25px;
   margin: 15px;
 }
 
-.input-format{
+#input-format{
   border-radius: 2px;
+  background: none;
+  border: none;
+  float: right;
+  width: 80px;
+  color: whitesmoke;
 }
 
 #submit{
