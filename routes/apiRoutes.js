@@ -1,3 +1,5 @@
+var request = require("request");
+var db = require("../models");
 var axios = require("axios");
 var db = require("../models");
 var selectedFlights = [];
