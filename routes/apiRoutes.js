@@ -6,6 +6,7 @@ var cityCode;
 var price;
 var fromDT;
 var toDT;
+var unirest = require("unirest");
 
 module.exports = function(app) {
   app.get("/api/flightQuotes", function(req, res) {
@@ -24,6 +25,7 @@ module.exports = function(app) {
         skyAPI(res);
       });
   });
+
   app.get("/api/eventSearch", function(req, res) {
     axios({
       method: "get",
@@ -41,6 +43,48 @@ module.exports = function(app) {
       })
       .catch(function(error) {
         console.log(error);
+      });
+  });
+
+  app.get("/api/flightTicketBooking", function(req, res) {
+    unirest
+      .post(
+        "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0"
+      )
+      .header(
+        "X-RapidAPI-Key",
+        "724f8b9587msh8a227a8b4dd0c9cp10065ajsnb69f17f1332c"
+      )
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .send("inboundDate=" + req.query.inboundDate)
+      .send("country=US")
+      .send("currency=USD")
+      .send("locale=en-US")
+      .send("originPlace=" + "MSP-sky")
+      .send("destinationPlace=" + "SFO-sky")
+      .send("outboundDate=" + req.query.outboundDate)
+      .send("adults=1")
+      .end(function(result) {
+        console.log(result.headers.location.split("/").pop());
+        var sessionKey = result.headers.location.split("/").pop();
+        unirest
+          .get(
+            "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/" +
+              sessionKey +
+              "?pageIndex=0&pageSize=10"
+          )
+          .header(
+            "X-RapidAPI-Key",
+            "724f8b9587msh8a227a8b4dd0c9cp10065ajsnb69f17f1332c"
+          )
+          .end(function(result) {
+            console.log(
+              result.body.Status,
+              result.body.Itineraries[0].PricingOptions[0].Price,
+              result.body.Itineraries[0].PricingOptions[0].DeeplinkUrl
+            );
+            res.send();
+          });
       });
   });
 };

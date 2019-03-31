@@ -230,6 +230,7 @@ function eventFunction() {
   eventCity = $(this).attr("value");
   buttonID = "#" + $(this).attr("id");
   eventAPI();
+  bookingAPI();
 }
 
 function eventAPI() {
@@ -284,6 +285,22 @@ function returnEvents() {
   }
   section.append(divContainer);
   $(buttonID).append(section);
+}
+
+function bookingAPI() {
+  $.ajax("/api/flightTicketBooking", {
+    type: "GET",
+    data: {
+      originPlace: city,
+      destinationPlace: eventCity,
+      outboundDate: fromDT,
+      inboundDate: toDT
+    }
+  }).then(returnBooking);
+}
+
+function returnBooking() {
+
 }
 
 $(document).ready(function() {
