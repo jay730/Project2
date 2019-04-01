@@ -149,41 +149,45 @@ function inputCollection() {
   //to date
   toDT = $("#toDT").val();
   //max price
-  price = $("#slider-format").val();
+  //price = $("#slider-format").val();
+  price = inputFormat.value
+    .split(")")
+    .pop()
+    .trim();
 }
 //Slider for max budget input
 
-var sliderFormat = document.getElementById('slider-format');
+var sliderFormat = document.getElementById("slider-format");
 
 noUiSlider.create(sliderFormat, {
   start: [100],
   step: 1,
   range: {
-    'min': [50],
-    'max': [1000]
+    min: [50],
+    max: [1000]
   },
   ariaFormat: wNumb({
     decimals: 3
   }),
   format: wNumb({
     decimals: 2,
-    thousand: '.',
-    prefix: ' ($) '
+    thousand: ".",
+    prefix: " ($) "
   })
 });
-var inputFormat = document.getElementById('input-format');
+var inputFormat = document.getElementById("input-format");
 
-sliderFormat.noUiSlider.on('update', function(values, handle) {
+sliderFormat.noUiSlider.on("update", function(values, handle) {
   inputFormat.value = values[handle];
 });
 
-inputFormat.addEventListener('change', function() {
+inputFormat.addEventListener("change", function() {
   sliderFormat.noUiSlider.set(this.value);
 });
 
 function inputValidation() {
-  if (!$.isNumeric(price) || price <= 0) {
-    $("#results").text("Please put correct price!");
+  if (origin === null) {
+    $("#results").text("Please select departing city!");
     inputValid = false;
   }
 
@@ -329,9 +333,7 @@ function bookingAPI() {
   }).then(returnBooking);
 }
 
-function returnBooking() {
-
-}
+function returnBooking() {}
 
 $(document).ready(function() {
   $(".first-button").on("click", function() {
