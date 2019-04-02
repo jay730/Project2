@@ -115,6 +115,8 @@ var noEventMessage = "";
 var buttonID;
 var eventCity;
 var inputValid = true;
+var originIata;
+var destinationIata;
 
 //functions
 //main functions to call sky api
@@ -149,41 +151,45 @@ function inputCollection() {
   //to date
   toDT = $("#toDT").val();
   //max price
-  price = $("#slider-format").val();
+  //price = $("#slider-format").val();
+  price = inputFormat.value
+    .split(")")
+    .pop()
+    .trim();
 }
 //Slider for max budget input
 
-var sliderFormat = document.getElementById('slider-format');
+var sliderFormat = document.getElementById("slider-format");
 
 noUiSlider.create(sliderFormat, {
   start: [100],
   step: 1,
   range: {
-    'min': [50],
-    'max': [1000]
+    min: [50],
+    max: [1000]
   },
   ariaFormat: wNumb({
     decimals: 3
   }),
   format: wNumb({
     decimals: 2,
-    thousand: '.',
-    prefix: ' ($) '
+    thousand: ".",
+    prefix: " ($) "
   })
 });
-var inputFormat = document.getElementById('input-format');
+var inputFormat = document.getElementById("input-format");
 
-sliderFormat.noUiSlider.on('update', function(values, handle) {
+sliderFormat.noUiSlider.on("update", function(values, handle) {
   inputFormat.value = values[handle];
 });
 
-inputFormat.addEventListener('change', function() {
+inputFormat.addEventListener("change", function() {
   sliderFormat.noUiSlider.set(this.value);
 });
 
 function inputValidation() {
-  if (!$.isNumeric(price) || price <= 0) {
-    $("#results").text("Please put correct price!");
+  if (origin === null) {
+    $("#results").text("Please select departing city!");
     inputValid = false;
   }
 
@@ -240,7 +246,9 @@ function returnFlights(selectedFlights) {
       $button.attr("class", "flightButton");
       $button.css("display", "block");
       $button.attr("id", i);
-      $button.attr("value", selectedFlights[i].destinationCity);
+      $button.attr("data-eventCity", selectedFlights[i].destinationCity);
+      $button.attr("data-destinationIata", selectedFlights[i].destinationIata);
+      $button.attr("data-originIata", selectedFlights[i].originIata);
       $divContainer.append($button);
     }
   }
@@ -257,9 +265,10 @@ function returnFlights(selectedFlights) {
 function eventFunction() {
   $(".eventSection").empty();
   selectedEvents = [];
-  eventCity = $(this).attr("value");
+  eventCity = $(this).attr("data-eventCity");
   buttonID = "#" + $(this).attr("id");
-  eventAPI();
+  destinationIata = $(this).attr("data-destinationIata");
+  originIata = $(this).attr("data-originIata");
   bookingAPI();
 }
 
@@ -321,16 +330,17 @@ function bookingAPI() {
   $.ajax("/api/flightTicketBooking", {
     type: "GET",
     data: {
-      originPlace: city,
-      destinationPlace: eventCity,
+      originIata: originIata,
+      destinationIata: destinationIata,
       outboundDate: fromDT,
       inboundDate: toDT
     }
   }).then(returnBooking);
 }
 
-function returnBooking() {
-
+function returnBooking(response) {
+  console.log(response);
+  eventAPI();
 }
 
 $(document).ready(function() {
