@@ -1,4 +1,3 @@
-var request = require("request");
 var db = require("../models");
 var axios = require("axios");
 var db = require("../models");
@@ -8,6 +7,11 @@ var cityCode;
 var price;
 var fromDT;
 var toDT;
+var sessionKey;
+var agentImg;
+var agentPrice;
+var agentUrl;
+var agentId;
 var unirest = require("unirest");
 
 module.exports = function(app) {
@@ -62,31 +66,15 @@ module.exports = function(app) {
       .send("country=US")
       .send("currency=USD")
       .send("locale=en-US")
-      .send("originPlace=" + "MSP-sky")
-      .send("destinationPlace=" + "SFO-sky")
+      .send("cabinClass=economy")
+      .send("originPlace=" + req.query.originIata)
+      .send("destinationPlace=" + req.query.destinationIata)
       .send("outboundDate=" + req.query.outboundDate)
       .send("adults=1")
       .end(function(result) {
         console.log(result.headers.location.split("/").pop());
-        var sessionKey = result.headers.location.split("/").pop();
-        unirest
-          .get(
-            "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/" +
-              sessionKey +
-              "?pageIndex=0&pageSize=10"
-          )
-          .header(
-            "X-RapidAPI-Key",
-            "724f8b9587msh8a227a8b4dd0c9cp10065ajsnb69f17f1332c"
-          )
-          .end(function(result) {
-            console.log(
-              result.body.Status,
-              result.body.Itineraries[0].PricingOptions[0].Price,
-              result.body.Itineraries[0].PricingOptions[0].DeeplinkUrl
-            );
-            res.send();
-          });
+        sessionKey = result.headers.location.split("/").pop();
+        getTickets(res);
       });
   });
 };
@@ -121,21 +109,25 @@ function filterFlights(response, res) {
   } else {
     for (var i = 0; i < response.data.Quotes.length; i++) {
       if (response.data.Quotes[i].MinPrice <= price) {
-        selectedFlights.push({
-          destinationCode: response.data.Quotes[i].OutboundLeg.DestinationId,
-          price: response.data.Quotes[i].MinPrice,
-          destinationCity: ""
-        });
-        selectedDesitinationId.push(
-          response.data.Quotes[i].OutboundLeg.DestinationId
-        );
+        if (selectedFlights.length < 9) {
+          selectedFlights.push({
+            destinationCode: response.data.Quotes[i].OutboundLeg.DestinationId,
+            price: response.data.Quotes[i].MinPrice,
+            destinationCity: "",
+            destinationIata: "",
+            originIata: cityCode + "-sky"
+          });
+          selectedDesitinationId.push(
+            response.data.Quotes[i].OutboundLeg.DestinationId
+          );
+        }
       }
     }
   }
 
   db.places
     .findAll({
-      attributes: ["cityName"],
+      attributes: ["cityName", "IataCode"],
       where: {
         PlaceId: selectedDesitinationId
       }
@@ -143,7 +135,56 @@ function filterFlights(response, res) {
     .then(function(result) {
       for (var i = 0; i < result.length; i++) {
         selectedFlights[i].destinationCity = result[i].dataValues.cityName;
+        selectedFlights[i].destinationIata =
+          result[i].dataValues.IataCode + "-sky";
       }
       res.send(selectedFlights);
+    });
+}
+
+function getTickets(res) {
+  unirest
+    .get(
+      "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/" +
+        sessionKey +
+        "?pageIndex=0&pageSize=10"
+    )
+    .header(
+      "X-RapidAPI-Key",
+      "724f8b9587msh8a227a8b4dd0c9cp10065ajsnb69f17f1332c"
+    )
+    .end(function(result) {
+      if (result.body.Status !== "UpdatesComplete") {
+        getTickets(res);
+      } else {
+        var lowest = Number.POSITIVE_INFINITY;
+        for (var i = 0; i < result.body.Itineraries.length; i++) {
+          for (
+            var j = 0;
+            j < result.body.Itineraries[i].PricingOptions.length;
+            j++
+          ) {
+            agentPrice = result.body.Itineraries[i].PricingOptions[j].Price;
+            if (agentPrice < lowest) {
+              lowest = agentPrice;
+              agentUrl =
+                result.body.Itineraries[i].PricingOptions[j].DeeplinkUrl;
+              agentId = result.body.Itineraries[i].PricingOptions[j].Agents[0];
+            }
+          }
+        }
+        for (var i = 0; i < result.body.Agents.length; i++) {
+          var agentIdKey = Object.keys(result.body.Agents[i]).find(key => result.body.Agents[i][key] === agentId);
+
+          if (agentIdKey !== undefined) {
+            agentImg = result.body.Agents[i].ImageUrl;
+          }
+        }
+        res.send({
+          agentImg: agentImg,
+          agentPrice: agentPrice,
+          agentUrl: agentUrl
+        });
+      }
     });
 }

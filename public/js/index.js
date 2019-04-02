@@ -115,6 +115,8 @@ var noEventMessage = "";
 var buttonID;
 var eventCity;
 var inputValid = true;
+var originIata;
+var destinationIata;
 
 //functions
 //main functions to call sky api
@@ -244,7 +246,9 @@ function returnFlights(selectedFlights) {
       $button.attr("class", "flightButton");
       $button.css("display", "block");
       $button.attr("id", i);
-      $button.attr("value", selectedFlights[i].destinationCity);
+      $button.attr("data-eventCity", selectedFlights[i].destinationCity);
+      $button.attr("data-destinationIata", selectedFlights[i].destinationIata);
+      $button.attr("data-originIata", selectedFlights[i].originIata);
       $divContainer.append($button);
     }
   }
@@ -261,9 +265,10 @@ function returnFlights(selectedFlights) {
 function eventFunction() {
   $(".eventSection").empty();
   selectedEvents = [];
-  eventCity = $(this).attr("value");
+  eventCity = $(this).attr("data-eventCity");
   buttonID = "#" + $(this).attr("id");
-  eventAPI();
+  destinationIata = $(this).attr("data-destinationIata");
+  originIata = $(this).attr("data-originIata");
   bookingAPI();
 }
 
@@ -325,15 +330,18 @@ function bookingAPI() {
   $.ajax("/api/flightTicketBooking", {
     type: "GET",
     data: {
-      originPlace: city,
-      destinationPlace: eventCity,
+      originIata: originIata,
+      destinationIata: destinationIata,
       outboundDate: fromDT,
       inboundDate: toDT
     }
   }).then(returnBooking);
 }
 
-function returnBooking() {}
+function returnBooking(response) {
+  console.log(response);
+  eventAPI();
+}
 
 $(document).ready(function() {
   $(".first-button").on("click", function() {
