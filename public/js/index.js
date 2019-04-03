@@ -244,7 +244,7 @@ function returnFlights(selectedFlights) {
         selectedFlights[i].destinationCity + "," + selectedFlights[i].price
       );
       $button.attr("class", "flightButton");
-      $button.css("display", "block");
+      $button.css({"display": "block","background-color": "white",});
       $button.attr("id", i);
       $button.attr("data-eventCity", selectedFlights[i].destinationCity);
       $button.attr("data-destinationIata", selectedFlights[i].destinationIata);
