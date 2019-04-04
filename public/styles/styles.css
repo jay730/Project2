@@ -275,6 +275,8 @@ width:100%;
 
   background: whitesmoke;
   border-radius: 2px;
+  cursor: pointer;
+  cursor:hand;
 }
 
 
