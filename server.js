@@ -33,8 +33,12 @@ db.sequelize.sync(syncOptions).then(function() {
     console.log(
       "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
       PORT,
+<<<<<<< HEAD
       PORT
     );
+=======
+      PORT);
+>>>>>>> 3070b50cf29c9dbf861b96667aaf96a0bc14a8b7
   });
 });
 

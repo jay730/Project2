@@ -32,8 +32,12 @@ module.exports = function(app) {
         }
       })
       .then(function(result) {
-        cityCode = result.dataValues.SkyscannerCode;
-        skyAPI(res);
+        if( result ) {
+          cityCode = result.dataValues.SkyscannerCode;
+          skyAPI(res);
+        } else {
+          res.json({error: true, message: 'No results'});
+        }
       });
   });
 
