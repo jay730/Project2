@@ -257,6 +257,7 @@ width:100%;
   border: none;
   border-radius: 0 0 7px 7px;
 }
+
 .input-container {
   margin: 15px;
 }
@@ -266,7 +267,7 @@ width:100%;
   background: none;
   border: none;
   float: right;
-  width: 75px;
+  width: 85px;
   margin: 1%;
   color: whitesmoke;
 }
