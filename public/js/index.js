@@ -234,7 +234,6 @@ function returnFlights(selectedFlights) {
   var $section = $("<section>");
   var $divContainer = $("<div>");
   $divContainer.attr("class", "container");
-  $divContainer.css("background", "black");
 
   if (selectedFlights.length === 0) {
     noQuoteMessage =
