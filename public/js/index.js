@@ -1,3 +1,103 @@
+// // Get references to page elements
+// var $exampleText = $("#example-text");
+// var $exampleDescription = $("#example-description");
+// var $submitBtn = $("#submit");
+// var $exampleList = $("#example-list");
+
+// // The API object contains methods for each kind of request we'll make
+// var API = {
+//   saveExample: function(example) {
+//     return $.ajax({
+//       headers: {
+//         "Content-Type": "application/json"
+//       },
+//       type: "POST",
+//       url: "api/examples",
+//       data: JSON.stringify(example)
+//     });
+//   },
+//   getExamples: function() {
+//     return $.ajax({
+//       url: "api/examples",
+//       type: "GET"
+//     });
+//   },
+//   deleteExample: function(id) {
+//     return $.ajax({
+//       url: "api/examples/" + id,
+//       type: "DELETE"
+//     });
+//   }
+// };
+
+// // refreshExamples gets new examples from the db and repopulates the list
+// var refreshExamples = function() {
+//   API.getExamples().then(function(data) {
+//     var $examples = data.map(function(example) {
+//       var $a = $("<a>")
+//         .text(example.text)
+//         .attr("href", "/example/" + example.id);
+
+//       var $li = $("<li>")
+//         .attr({
+//           class: "list-group-item",
+//           "data-id": example.id
+//         })
+//         .append($a);
+
+//       var $button = $("<button>")
+//         .addClass("btn btn-danger float-right delete")
+//         .text("ｘ");
+
+//       $li.append($button);
+
+//       return $li;
+//     });
+
+//     $exampleList.empty();
+//     $exampleList.append($examples);
+//   });
+// };
+
+// // handleFormSubmit is called whenever we submit a new example
+// // Save the new example to the db and refresh the list
+// var handleFormSubmit = function(event) {
+//   event.preventDefault();
+
+//   var example = {
+//     text: $exampleText.val().trim(),
+//     description: $exampleDescription.val().trim()
+//   };
+
+//   if (!(example.text && example.description)) {
+//     alert("You must enter an example text and description!");
+//     return;
+//   }
+
+//   API.saveExample(example).then(function() {
+//     refreshExamples();
+//   });
+
+//   $exampleText.val("");
+//   $exampleDescription.val("");
+// };
+
+// // handleDeleteBtnClick is called when an example's delete button is clicked
+// // Remove the example from the db and refresh the list
+// var handleDeleteBtnClick = function() {
+//   var idToDelete = $(this)
+//     .parent()
+//     .attr("data-id");
+
+//   API.deleteExample(idToDelete).then(function() {
+//     refreshExamples();
+//   });
+// };
+
+// // Add event listeners to the submit and delete buttons
+// $submitBtn.on("click", handleFormSubmit);
+// $exampleList.on("click", ".delete", handleDeleteBtnClick);
+
 //global vars
 // var noUiSlider = require('nouislider')
 var origin;
@@ -133,10 +233,11 @@ function returnFlights(selectedFlights) {
   var $section = $("<section>");
   var $divContainer = $("<div>");
   $divContainer.attr("class", "container");
+  $divContainer.css("background", "black");
 
   if (selectedFlights.length === 0) {
     noQuoteMessage =
-      "no quote is available at this time! You might want to increase the price.";
+      "No quote is available at this time! You might want to increase the price.";
   } else {
     for (var i = 0; i < selectedFlights.length; i++) {
       var $button = $("<button>");
@@ -144,7 +245,12 @@ function returnFlights(selectedFlights) {
         selectedFlights[i].destinationCity + "," + selectedFlights[i].price
       );
       $button.attr("class", "flightButton");
-      $button.css({"display": "block","background-color": "white",});
+      $button.css("display", "block");
+      $button.css("background", "white");
+      $button.css("color", "black");
+      $button.css("height", "200px");
+      $button.css("width", "100%");
+      $button.css("margin", "15px");
       $button.attr("id", i);
       $button.attr("data-eventCity", selectedFlights[i].destinationCity);
       $button.attr("data-destinationIata", selectedFlights[i].destinationIata);
@@ -241,33 +347,6 @@ function bookingAPI() {
 function returnBooking(response) {
   console.log(response);
   eventAPI();
-}
-
-function onSignIn(googleUser) {
-  $("#signIn").addClass("d-none");
-  $("#signOut").removeClass("d-none");
-  var profile = googleUser.getBasicProfile();
-  var idToken = googleUser.getAuthResponse().id_token;
-  console.log("ID token: " + idToken);
-  console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log("Name: " + profile.getName());
-  console.log("Image URL: " + profile.getImageUrl());
-  console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
-  $.ajax("/tokensignin", {
-    type: "POST",
-    data: {
-      idToken: idToken
-    }
-  });
-}
-
-function signOut() {
-  $("#signIn").removeClass("d-none");
-  $("#signOut").addClass("d-none");
-  var auth2 = gapi.auth2.getAuthInstance();
-  auth2.signOut().then(function() {
-    console.log("User signed out.");
-  });
 }
 
 $(document).ready(function() {
