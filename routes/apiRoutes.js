@@ -1,6 +1,6 @@
+require("dotenv").config();
 var db = require("../models");
 var axios = require("axios");
-var db = require("../models");
 var selectedFlights = [];
 var selectedDesitinationId = [];
 var cityCode;
@@ -14,8 +14,8 @@ var agentUrl;
 var agentId;
 var unirest = require("unirest");
 var {OAuth2Client} = require("google-auth-library");
-var client = new OAuth2Client("672272415432-229al3ls5bkrnnp9vg69m5if5eav1pep.apps.googleusercontent.com");
-var clientId = "672272415432-229al3ls5bkrnnp9vg69m5if5eav1pep.apps.googleusercontent.com";
+var client = new OAuth2Client(process.env.googleClientId);
+var clientId = process.env.googleClientId;
 var signInStatus = false;
 var userid;
 
@@ -46,7 +46,7 @@ module.exports = function(app) {
       method: "get",
       url: "https://app.ticketmaster.com/discovery/v2/events.json?",
       params: {
-        apikey: "RiZRkyV5YlnXPcOPAlrXwWG4IMbwx2n8",
+        apikey: process.env.ticketmasterApiKey,
         countryCode: "US",
         city: req.query.city,
         startDateTime: req.query.startDateTime,
@@ -68,7 +68,7 @@ module.exports = function(app) {
       )
       .header(
         "X-RapidAPI-Key",
-        "724f8b9587msh8a227a8b4dd0c9cp10065ajsnb69f17f1332c"
+        process.env.skyRapidKey
       )
       .header("Content-Type", "application/x-www-form-urlencoded")
       .send("inboundDate=" + req.query.inboundDate)
@@ -106,14 +106,13 @@ function skyAPI(res) {
     method: "get",
     url: queryURL,
     params: {
-      ApiKey: "prtl6749387986743898559646983194"
+      ApiKey: process.env.skyApiKey
     }
   })
     .then(function(response) {
       filterFlights(response, res);
     })
     .catch(function(error) {
-      console.log(error.response);
       console.log(error.response.data);
     });
 }
