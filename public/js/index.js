@@ -99,7 +99,6 @@
 // $exampleList.on("click", ".delete", handleDeleteBtnClick);
 
 //global vars
-// var noUiSlider = require('nouislider')
 var origin;
 var fromDT;
 var toDT;
