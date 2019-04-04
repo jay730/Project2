@@ -350,9 +350,9 @@ function returnBooking(response) {
   console.log(response);
   ticketButton = $("<button>");
   var ticketLink = $("<a>");
-      ticketLink.text("Take Me Here!");
-      ticketLink.attr("href", response.agentUrl);
-      ticketLink.attr("target", "_blank");
+  ticketLink.text("Take Me Here!");
+  ticketLink.attr("href", response.agentUrl);
+  ticketLink.attr("target", "_blank");
   ticketButton.append(ticketLink);
   eventAPI();
 }
