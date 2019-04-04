@@ -118,6 +118,7 @@ var inputValid = true;
 var originIata;
 var destinationIata;
 var signIn = false;
+var ticketButton;
 //functions
 //main functions to call sky api
 function mainFunction() {
@@ -323,6 +324,7 @@ function returnEvents() {
       eventLink.attr("target", "_blank");
       eventButton.append(eventLink);
       divContainer.append(eventButton);
+      divContainer.append(ticketButton);
     }
   } else {
     divContainer.text(noEventMessage);
@@ -346,6 +348,12 @@ function bookingAPI() {
 
 function returnBooking(response) {
   console.log(response);
+  ticketButton = $("<button>");
+  var ticketLink = $("<a>");
+      ticketLink.text("Take Me Here!");
+      ticketLink.attr("href", response.agentUrl);
+      ticketLink.attr("target", "_blank");
+  ticketButton.append(ticketLink);
   eventAPI();
 }
 

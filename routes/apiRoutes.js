@@ -18,6 +18,7 @@ var client = new OAuth2Client(process.env.googleClientId);
 var clientId = process.env.googleClientId;
 var signInStatus = false;
 var userid;
+var path = require("path");
 
 module.exports = function(app) {
   app.get("/api/flightQuotes", function(req, res) {
@@ -114,6 +115,8 @@ function skyAPI(res) {
     })
     .catch(function(error) {
       console.log(error.response.data);
+      var testHtml = path.join(__dirname, "../public/html/test.html");
+      res.sendFile(testHtml);
     });
 }
 
