@@ -17,7 +17,7 @@ var eventCity;
 var inputValid = true;
 var originIata;
 var destinationIata;
-
+var signIn = false;
 //functions
 //main functions to call sky api
 function mainFunction() {
@@ -258,7 +258,7 @@ function onSignIn(googleUser) {
     data: {
       idToken: idToken
     }
-  });
+  }).then(checkSignIn);
 }
 
 function signOut() {
@@ -268,6 +268,12 @@ function signOut() {
   auth2.signOut().then(function() {
     console.log("User signed out.");
   });
+}
+
+function checkSignIn(signInStatus) {
+  if (signInStatus) {
+    signIn = true;
+  }
 }
 
 $(document).ready(function() {

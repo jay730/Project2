@@ -89,7 +89,7 @@ module.exports = function(app) {
   app.post("/tokensignin", function(req, res){
     //google auth
     //console.log(req.body.idToken);
-    verify(req).catch(console.error);
+    verify(req, res).catch(console.error);
   })
 };
 
@@ -203,7 +203,7 @@ function getTickets(res) {
     });
 }
 
-async function verify(req) {
+async function verify(req, res) {
   //console.log(req.query.idToken);
   const ticket = await client.verifyIdToken({
       idToken: req.body.idToken,
@@ -217,4 +217,5 @@ async function verify(req) {
   //const domain = payload['hd'];
   console.log(userid);
   signInStatus = true;
+  res.send(signInStatus);
 }
