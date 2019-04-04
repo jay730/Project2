@@ -13,6 +13,11 @@ var agentPrice;
 var agentUrl;
 var agentId;
 var unirest = require("unirest");
+var {OAuth2Client} = require("google-auth-library");
+var client = new OAuth2Client("672272415432-229al3ls5bkrnnp9vg69m5if5eav1pep.apps.googleusercontent.com");
+var clientId = "672272415432-229al3ls5bkrnnp9vg69m5if5eav1pep.apps.googleusercontent.com";
+var signInStatus = false;
+var userid;
 
 module.exports = function(app) {
   app.get("/api/flightQuotes", function(req, res) {
@@ -77,11 +82,16 @@ module.exports = function(app) {
         getTickets(res);
       });
   });
+  app.post("/tokensignin", function(req, res){
+    //google auth
+    //console.log(req.body.idToken);
+    verify(req).catch(console.error);
+  })
 };
 
 function skyAPI(res) {
   var queryURL =
-    "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/US/usd/en-US/" +
+    "https://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/US/usd/en-US/" +
     cityCode +
     "/us/" +
     fromDT +
@@ -99,7 +109,8 @@ function skyAPI(res) {
       filterFlights(response, res);
     })
     .catch(function(error) {
-      console.log(error);
+      console.log(error.response);
+      console.log(error.response.data);
     });
 }
 
@@ -187,4 +198,20 @@ function getTickets(res) {
         });
       }
     });
+}
+
+async function verify(req) {
+  //console.log(req.query.idToken);
+  const ticket = await client.verifyIdToken({
+      idToken: req.body.idToken,
+      audience: clientId,  // Specify the CLIENT_ID of the app that accesses the backend
+      // Or, if multiple clients access the backend:
+      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+  });
+  const payload = ticket.getPayload();
+  userid = payload['sub'];
+  // If request specified a G Suite domain:
+  //const domain = payload['hd'];
+  console.log(userid);
+  signInStatus = true;
 }

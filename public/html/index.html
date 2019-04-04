@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="672272415432-229al3ls5bkrnnp9vg69m5if5eav1pep.apps.googleusercontent.com">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -13,6 +15,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
         integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.1.0/wNumb.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/13.1.4/nouislider.css">
     <title>FlyBuy</title>
 </head>
@@ -32,11 +35,14 @@
                 <ul class="navbar-nav mr-auto">
                 </ul>
                 <ul class="navbar-nav">
+<!--                     <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/register') }}">Trips</a>
+                    </li> -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/login') }}">Trips</a>
+                        <a class="nav-link g-signin2" data-onsuccess="onSignIn" id="signIn"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/register') }}">Login</a>
+                            <a class="nav-link d-none" href="#" onclick="signOut();" id="signOut">Sign Out</a>
                     </li>
                 </ul>
             </div>
