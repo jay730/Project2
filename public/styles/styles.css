@@ -598,3 +598,8 @@ body.loading .modal {
 body.loading .modal {
     display: block;
 }
+
+.btn{
+  white-space:normal !important;
+  word-wrap: break-word; 
+}

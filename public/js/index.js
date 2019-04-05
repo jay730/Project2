@@ -149,11 +149,11 @@ function returnFlights(selectedFlights) {
         $button.text(
           selectedFlights[i].destinationCity + ", $" + selectedFlights[i].price
         );
-        $button.addClass("flightButton btn w-100 mx-auto");
+        $button.addClass("flightButton btn w-100 mx-auto border");
         $button.css("display", "block");
         $button.css("background", "white");
         $button.css("color", "black");
-        $button.css("height", "200px");
+        $button.css("height", "100px");
         $button.css("margin", "15px");
         $button.attr("id", i);
         $button.attr("data-eventCity", selectedFlights[i].destinationCity);
@@ -183,6 +183,8 @@ function eventFunction() {
   buttonID = "#" + $(this).attr("id");
   $(".flightButton").attr("disabled", false);
   $(this).attr("disabled", true);
+  $(".flightButton").height("100px");
+  $(this).height("250px");
   destinationIata = $(this).attr("data-destinationIata");
   originIata = $(this).attr("data-originIata");
   bookingAPI();
@@ -232,7 +234,7 @@ function returnEvents() {
       eventLink.attr("href", selectedEvents[i].eventURL);
       eventLink.attr("target", "_blank");
       eventLink.addClass("text-dark");
-      eventButton.addClass("btn btn-primary btn-sm");
+      eventButton.addClass("btn btn-primary btn-sm border");
       eventButton.append(eventLink);
       divContainer.append(eventButton);
     }
@@ -244,7 +246,7 @@ function returnEvents() {
   if (signIn) {
     addTripButton = $("<button>");
     addTripButton.text("Add Trip");
-    addTripButton.addClass("btn addTrip btn-secondary btn-sm text-dark");
+    addTripButton.addClass("btn addTrip btn-secondary btn-sm text-dark border");
     divContainer.append(addTripButton);
   }
   section.append(divContainer);
@@ -272,7 +274,7 @@ function returnBooking(response) {
   ticketLink.attr("target", "_blank");
   ticketLink.addClass("text-dark");
   ticketButton.append(ticketLink);
-  ticketButton.addClass("btn btn-success btn-sm");
+  ticketButton.addClass("btn btn-success btn-sm border");
   eventAPI();
 }
 
