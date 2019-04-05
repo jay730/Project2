@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("newrelic");
 var express = require("express");
 var helmet = require("helmet");
 
