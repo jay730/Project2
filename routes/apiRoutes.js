@@ -1,5 +1,15 @@
 require("dotenv").config();
 var db = require("../models");
+const MongoClient = require("mongodb").MongoClient;
+const uri = process.env.MONGODB_URI;
+const mongoClient = new MongoClient(uri, { useNewUrlParser: true });
+var dbCollections;
+
+mongoClient.connect(function(err){
+  if (err) throw err;
+  dbCollections = mongoClient.db("heroku_90sdl1h9").collection("userTrip");
+});
+
 var axios = require("axios");
 var selectedFlights = [];
 var selectedDesitinationId = [];
@@ -18,7 +28,7 @@ var client = new OAuth2Client(process.env.googleClientId);
 var clientId = process.env.googleClientId;
 var signInStatus = false;
 var userid;
-var path = require("path");
+
 
 module.exports = function(app) {
   app.get("/api/flightQuotes", function(req, res) {
@@ -91,7 +101,34 @@ module.exports = function(app) {
     //google auth
     //console.log(req.body.idToken);
     verify(req, res).catch(console.error);
-  })
+  });
+  app.post("/addTrip", function(req, res){
+    var addTripResult = dbCollections.findOneAndUpdate(
+        { userid: userid }, 
+        {
+          $push: { 
+            trip: {
+              originIata: req.body.originIata, 
+              destinationIata: req.body.destinationIata, 
+              fromDT: req.body.fromDT, 
+              toDT: req.body.toDT
+            }
+          }
+        }  
+      );
+    if (addTripResult !== "") {
+      res.send(true)
+    } else {
+      res.semd(false)
+    }
+  });
+  app.get("/api/trips", function(req, res) {
+   dbCollections.find({userid: userid}, {projection: {trip: 1, _id: 0}}).toArray(function(err, docs){
+      if (err) throw err;
+      console.log(docs);
+      return res.json(docs);
+    });
+  });
 };
 
 function skyAPI(res) {
@@ -115,8 +152,6 @@ function skyAPI(res) {
     })
     .catch(function(error) {
       console.log(error.response.data);
-      var testHtml = path.join(__dirname, "../public/html/test.html");
-      res.sendFile(testHtml);
     });
 }
 
@@ -220,5 +255,15 @@ async function verify(req, res) {
   //const domain = payload['hd'];
   console.log(userid);
   signInStatus = true;
+  checkUser();
   res.send(signInStatus);
+}
+
+function checkUser() {
+    dbCollections.find({userid: userid}).toArray(function(err, docs) {
+        if (err) throw err;
+        if (docs === undefined || docs.length === 0) {
+          dbCollections.insertOne({userid: userid, trip: []});
+        }
+    });
 }
