@@ -1,4 +1,4 @@
-//requires and requests
+//requirements and requests 
 var request = require("request");
 var db = require("./models");
 
@@ -30,18 +30,18 @@ module.exports = function(app) {
 function filterFlights(response) {
   if (response.Quotes.length === 0) {
       //If no info in the response
-    noQuoteMessage = "no quote is available at this time!";
+    noQuoteMessage = "No quote is available for your request!";
   } else {
     for (var i = 0; i < response.Quotes.length; i++) {
       if (response.Quotes[i].MinPrice <= price) {
+
         var destinationCode = response.Quotes[i].OutboundLeg.DestinationId;
         var place = $.grep(placesArray, function(n) {
           return n.PlaceId === destinationCode;
         });
 
-        
-        //var destinationCity = place[0].CityName;
-        var destinationCity = "test";
+
+        var destinationCity = place[0].CityName;
         selectedFlights.push({
           destinationCity: destinationCity,
           price: response.Quotes[i].MinPrice
