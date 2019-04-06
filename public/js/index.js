@@ -145,12 +145,15 @@ function returnFlights(selectedFlights) {
         $button.text(
           selectedFlights[i].destinationCity + ", $" + selectedFlights[i].price
         );
-        $button.addClass("flightButton btn w-100 mx-auto border");
+        $button.addClass("flightButton btn border");
         $button.css("display", "block");
         $button.css("background", "white");
         $button.css("color", "black");
-        $button.css("height", "100px");
+        $button.css("height", "200px");
+        $button.css("width", "200px");
         $button.css("margin", "15px");
+        $button.css("border-radius", "5px");
+        $button.css("float", "left");
         $button.attr("id", i);
         $button.attr("data-eventCity", selectedFlights[i].destinationCity);
         $button.attr(
@@ -221,7 +224,7 @@ function returnEvents() {
   var section = $("<section>");
   var divContainer = $("<div>");
   section.addClass("eventSection");
-  divContainer.addClass("container btn-group-vertical w-75 mx-auto");
+  divContainer.addClass("container btn-group-vertical w-100 mx-auto");
   if (selectedEvents.length !== 0) {
     for (var i = 0; i < selectedEvents.length; i++) {
       var eventButton = $("<button>");
