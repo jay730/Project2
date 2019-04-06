@@ -125,8 +125,7 @@ module.exports = function(app) {
   app.get("/api/trips", function(req, res) {
    dbCollections.find({userid: userid}, {projection: {trip: 1, _id: 0}}).toArray(function(err, docs){
       if (err) throw err;
-      console.log(docs);
-      return res.json(docs);
+      return res.json(docs[0].trip);
     });
   });
 };

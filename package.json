@@ -15,16 +15,13 @@
     "axios": "^0.18.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
-    "express-handlebars": "^3.0.0",
     "mysql2": "^1.6.4",
     "nouislider": "^13.1.4",
-    "request": "^2.88.0",
     "sequelize": "^4.41.2",
     "unirest": "^0.6.0",
     "google-auth-library": "^3.1.2",
     "helmet": "^3.16.0",
-    "mongodb": "^3.2.2",
-    "newrelic": "^5.6.3"
+    "mongodb": "^3.2.2"
   },
   "devDependencies": {
     "chai": "^4.1.2",

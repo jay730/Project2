@@ -3,11 +3,9 @@ var fromDT;
 var toDT;
 var price;
 var city;
-var stateCode;
 var startDateTime;
 var endDateTime;
 var selectedEvents = [];
-var placesArray = [];
 var noQuoteMessage = "";
 var noEventMessage = "";
 var buttonID;
@@ -18,7 +16,6 @@ var destinationIata;
 var signIn = false;
 var ticketButton;
 var $body = $("body");
-var br = $("<br>");
 
 //functions
 //main functions to call sky api
@@ -114,7 +111,6 @@ function inputValidation() {
 function inputConversion() {
   var cityState = origin.split(",");
   city = cityState[0];
-  stateCode = cityState[1];
   startDateTime = fromDT + "T00:00:00Z";
   endDateTime = toDT + "T00:00:00Z";
 }
