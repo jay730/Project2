@@ -1,8 +1,8 @@
 require("dotenv").config();
 var db = require("../models");
-const MongoClient = require("mongodb").MongoClient;
-const uri = process.env.MONGODB_URI;
-const mongoClient = new MongoClient(uri, { useNewUrlParser: true });
+var MongoClient = require("mongodb").MongoClient;
+var uri = process.env.MONGODB_URI;
+var mongoClient = new MongoClient(uri, { useNewUrlParser: true });
 var dbCollections;
 
 mongoClient.connect(function(err){
